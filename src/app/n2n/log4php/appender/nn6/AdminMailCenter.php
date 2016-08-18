@@ -4,7 +4,7 @@ use n2n\io\fs\FsPath;
 
 use n2n\core\VarStore;
 
-use n2n\N2N;
+use n2n\core\N2N;
 
 use n2n\log4php\LoggerException;
 use n2n\mail\Mail;

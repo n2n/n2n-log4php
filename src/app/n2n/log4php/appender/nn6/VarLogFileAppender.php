@@ -1,7 +1,7 @@
 <?php
 namespace n2n\log4php\appender\nn6;
 use n2n\log4php\appender\AppenderFile;
-use n2n\N2N;
+use n2n\core\N2N;
 use n2n\core\VarStore;
 
 class VarLogFileAppender extends AppenderFile {
