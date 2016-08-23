@@ -5,8 +5,6 @@
     "keywords": ["log4php","n2n"],
     "homepage": "http://n2n.rocks",
     "license": "GNU LGPL",
-    "authors": [
-    ],
     "require": {
         "php": ">=7.0"
     },
