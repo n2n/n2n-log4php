@@ -4,7 +4,6 @@
     "description": "log4php for n2n",
     "keywords": ["log4php","n2n"],
     "homepage": "http://n2n.rocks",
-    "license": "GNU LGPL",
     "require": {
         "php": ">=7.0"
     },
