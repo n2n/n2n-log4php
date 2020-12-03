@@ -1,5 +1,11 @@
 <?php
 namespace n2n\log4php\layout;
+use n2n\log4php\LoggerException;
+use n2n\log4php\LoggerLayout;
+use n2n\log4php\logging\LoggingEvent;
+use n2n\log4php\pattern\PatternConverter;
+use n2n\log4php\pattern\PatternParser;
+
 /**
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  See the NOTICE file distributed with
@@ -31,7 +37,7 @@ namespace n2n\log4php\layout;
  * @subpackage layouts
  * @version $Revision: 1395470 $
  */
-class LayoutPattern extends \n2n\log4php\LoggerLayout {
+class LayoutPattern extends LoggerLayout {
 	
 	/** Default conversion pattern */
 	const DEFAULT_CONVERSION_PATTERN = '%date %-5level %logger %message%newline';
@@ -117,7 +123,7 @@ class LayoutPattern extends \n2n\log4php\LoggerLayout {
 	
 	/** 
 	 * Head of a chain of Converters.
-	 * @var LoggerPatternConverter 
+	 * @var PatternConverter
 	 */
 	private $head;
 
@@ -135,7 +141,7 @@ class LayoutPattern extends \n2n\log4php\LoggerLayout {
 	 * Sets the conversionPattern option. This is the string which
 	 * controls formatting and consists of a mix of literal content and
 	 * conversion specifiers.
-	 * @param array $conversionPattern
+	 * @param string $conversionPattern
 	 */
 	public function setConversionPattern($conversionPattern) {
 		$this->pattern = $conversionPattern;
@@ -147,20 +153,20 @@ class LayoutPattern extends \n2n\log4php\LoggerLayout {
 	 */
 	public function activateOptions() {
 		if (!isset($this->pattern)) {
-			throw new \n2n\log4php\LoggerException("Mandatory parameter 'conversionPattern' is not set.");
+			throw new LoggerException("Mandatory parameter 'conversionPattern' is not set.");
 		}
 		
-		$parser = new \n2n\log4php\pattern\PatternParser($this->pattern, $this->converterMap);
+		$parser = new PatternParser($this->pattern, $this->converterMap);
 		$this->head = $parser->parse();
 	}
 	
 	/**
 	 * Produces a formatted string as specified by the conversion pattern.
 	 *
-	 * @param \n2n\log4php\logging\LoggingEvent $event
+	 * @param LoggingEvent $event
 	 * @return string
 	 */
-	public function format(\n2n\log4php\logging\LoggingEvent $event) {
+	public function format(LoggingEvent $event) {
 		$sbuf = '';
 		$converter = $this->head;
 		while ($converter !== null) {

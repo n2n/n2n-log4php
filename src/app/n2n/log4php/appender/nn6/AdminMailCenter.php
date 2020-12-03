@@ -1,14 +1,18 @@
 <?php
 namespace n2n\log4php\appender\nn6;
+use DateTime;
 use n2n\io\fs\FsPath;
 
 use n2n\core\VarStore;
 
 use n2n\core\N2N;
 
+use n2n\log4php\LoggerAppender;
 use n2n\log4php\LoggerException;
+use n2n\log4php\logging\LoggingEvent;
 use n2n\mail\Mail;
 use n2n\io\IoUtils;
+
 /**
  * Adminmailcenter uses the SimpleXML function to output events. 
  * 
@@ -25,12 +29,12 @@ use n2n\io\IoUtils;
  * @license http://www.apache.org/licenses/LICENSE-2.0 Apache License, Version 2.0
  * @link http://logging.apache.org/log4php/docs/appenders/echo.html Appender documentation
  */
-class AdminMailCenter extends \n2n\log4php\LoggerAppender {
+class AdminMailCenter extends LoggerAppender {
 	protected $file;
 
 	const LOG_FOLDER = 'mail';
 	const DEFAULT_MAIL_FILE_NAME = 'mail.xml';
-	
+
 	const TAG_NAME_MAIL_ITEMS = 'logItems';
 	const TAG_NAME_ITEM = 'item';
 	const TAG_NAME_MESSAGE = 'message';
@@ -45,15 +49,17 @@ class AdminMailCenter extends \n2n\log4php\LoggerAppender {
 	const TAG_NAME_ATTACHMENT = 'attachment';
 	const TAG_NAME_PATH = 'path';
 	const TAG_NAME_NAME = 'name';
-	
+
 	private $severity;
-	
+
 	public function __construct($file = null) {
+		parent::__construct();
 		$this->setFile($file);
 	}
-	
+
 	public function setFile($file) {
-		$this->setString('file', $file);
+		$datedFileName = self::replaceDatePlaceholders($file, date('Y'), date('m'));
+		$this->setString('file', $datedFileName);
 	}
 
 	public function getFile() {
@@ -69,7 +75,7 @@ class AdminMailCenter extends \n2n\log4php\LoggerAppender {
 		$this->closed = false;
 	}
 	
-	public function append(\n2n\log4php\logging\LoggingEvent $event) {
+	public function append(LoggingEvent $event) {
 		$this->severity = $event->getLevel()->toString();
 		$message = $event->getMessage();
 		if ($message instanceof Mail) {
@@ -78,11 +84,36 @@ class AdminMailCenter extends \n2n\log4php\LoggerAppender {
 			throw new LoggerException("The message for the AdminMailCenter has to be an instance of n2n\\mail\\Mail");
 		}
 	}
-	
+
+	/**
+	 * Scans mail log directory and return array containing the files available
+	 * @return array|FsPath[]
+	 */
+	public static function scanMailLogFiles() {
+		$mailLogsDir = new FsPath(self::getTargetDirectoryPath());
+		return $mailLogsDir->getChildren();
+	}
+
+	/**
+	 * Checks if the log file for year and month exists.
+	 * @param int $year
+	 * @param int $month
+	 * @return bool
+	 */
+	public static function logFileExists(string $filename) {
+		foreach (self::scanMailLogFiles() as $mailLogFile) {
+			if ($mailLogFile->getName() === $filename) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
 	private function logMail(Mail $mail) {
 		$this->checkAndCreateFile();
-		$now = new \DateTime();
-		$xmlStr = "\t" . '<' . self::TAG_NAME_ITEM . ' severity="' . htmlspecialchars($this->severity) . '" datetime="' . htmlspecialchars($now->format(\DateTime::ATOM)) . '">' . "\r\n";
+		$now = new DateTime();
+		$xmlStr = "\t" . '<' . self::TAG_NAME_ITEM . ' severity="' . htmlspecialchars($this->severity) . '" datetime="' . htmlspecialchars($now->format(DateTime::ATOM)) . '">' . "\r\n";
 		$items = array(
 				self::TAG_NAME_MESSAGE => $mail->getMessage(),
 				self::TAG_NAME_SUBJECT => $mail->getSubject(),
@@ -151,21 +182,32 @@ class AdminMailCenter extends \n2n\log4php\LoggerAppender {
 			. '<' . self::TAG_NAME_MAIL_ITEMS . '>');
 		}
 	}
-	
+
 	private function getTargetFilePath() {
-		return new FsPath($this->getTargetDirectoryPath() . DIRECTORY_SEPARATOR . $this->file);
+		return new FsPath(self::getTargetDirectoryPath() . DIRECTORY_SEPARATOR . $this->file);
 	}
-	
-	private function getTargetDirectoryPath() {
+
+	private static function getTargetDirectoryPath() {
 		return N2N::getVarStore()->requestDirFsPath(VarStore::CATEGORY_LOG, N2N::NS,
 				self::LOG_FOLDER, true);
 	}
-	
+
 	private function areArrayKeysGenerated(array $arr) {
 		foreach (array_keys($arr) as $key => $value) {
 			if (!($key === $value)) return false;
-		} 
+		}
 		return true;
+	}
+
+	/**
+	 * Replaces the placeholders {yyyy} and {mm} in $str by $year and $month
+	 * @param string $str
+	 * @param int $year
+	 * @param int $month
+	 * @return string
+	 */
+	public static function replaceDatePlaceholders(string $str, int $year, int $month): string {
+		return str_replace(array('{yyyy}', '{mm}'), array($year, $month), $str);
 	}
 }
 
