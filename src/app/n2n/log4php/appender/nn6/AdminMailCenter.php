@@ -58,7 +58,7 @@ class AdminMailCenter extends LoggerAppender {
 	}
 
 	public function setFile($file) {
-		$datedFileName = self::replaceDatePlaceholders($file, date('Y'), date('m'));
+		$datedFileName = self::replaceDatePlaceholders($file);
 		$this->setString('file', $datedFileName);
 	}
 
@@ -199,15 +199,15 @@ class AdminMailCenter extends LoggerAppender {
 		return true;
 	}
 
-	/**
-	 * Replaces the placeholders {yyyy} and {mm} in $str by $year and $month
+	/**x
+	 * Replaces values in-between curly brackets {} in $str by {@see date()} function values.
 	 * @param string $str
-	 * @param int $year
-	 * @param int $month
 	 * @return string
 	 */
-	public static function replaceDatePlaceholders(string $str, int $year, int $month): string {
-		return str_replace(array('{yyyy}', '{mm}'), array($year, $month), $str);
+	public static function replaceDatePlaceholders(string $str): string {
+		return preg_replace_callback('/{(.*?)}/',
+			function ($matches) { return date($matches[1]); },
+			$str);
 	}
 }
 
