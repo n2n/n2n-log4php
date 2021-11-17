@@ -59,7 +59,7 @@ class AdapterPHP implements \n2n\log4php\configuration\ConfigurationAdapter
 		}
 		
 		// Load the config file
-		$data = \n2n\io\IoUtils::getContentsSafe($url);
+		$data = \n2n\util\io\IoUtils::getContentsSafe($url);
 		if ($data === false) {
 			$error = error_get_last();
 			throw new \n2n\log4php\LoggerException("Error loading config file: {$error['message']}");

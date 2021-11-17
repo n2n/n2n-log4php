@@ -87,7 +87,7 @@ class AppenderFile extends \n2n\log4php\LoggerAppender {
 			$dir = dirname($file);
 
 			if(!is_dir($dir)) {
-				$success = \n2n\io\IoUtils::mkdirs($dir, 0777, true);
+				$success = \n2n\util\io\IoUtils::mkdirs($dir, 0777, true);
 				if ($success === false) {
 					$this->warn("Failed creating target directory [$dir]. Closing appender.");
 					$this->closed = true;
@@ -97,7 +97,7 @@ class AppenderFile extends \n2n\log4php\LoggerAppender {
 		}
 		
 		$mode = $this->append ? 'a' : 'w';
-		$this->fp = \n2n\io\IoUtils::fopen($file, $mode);
+		$this->fp = \n2n\util\io\IoUtils::fopen($file, $mode);
 		if ($this->fp === false) {
 			$this->warn("Failed opening target file. Closing appender.");
 			$this->fp = null;
@@ -107,7 +107,7 @@ class AppenderFile extends \n2n\log4php\LoggerAppender {
 		
 		// Required when appending with concurrent access
 		if($this->append) {
-			\n2n\io\IoUtils::fseek($this->fp, 0, SEEK_END);
+			\n2n\util\io\IoUtils::fseek($this->fp, 0, SEEK_END);
 		}
 		
 		// Write the header
@@ -134,12 +134,12 @@ class AppenderFile extends \n2n\log4php\LoggerAppender {
 	}
 	
 	protected function writeWithLocking($string) {
-		if(\n2n\io\IoUtils::flock($this->fp, LOCK_EX)) {
-			if(\n2n\io\IoUtils::fwrite($this->fp, $string) === false) {
+		if(\n2n\util\io\IoUtils::flock($this->fp, LOCK_EX)) {
+			if(\n2n\util\io\IoUtils::fwrite($this->fp, $string) === false) {
 				$this->warn("Failed writing to file. Closing appender.");
 				$this->closed = true;				
 			}
-			\n2n\io\IoUtils::flock($this->fp, LOCK_UN);
+			\n2n\util\io\IoUtils::flock($this->fp, LOCK_UN);
 		} else {
 			$this->warn("Failed locking file for writing. Closing appender.");
 			$this->closed = true;
@@ -147,7 +147,7 @@ class AppenderFile extends \n2n\log4php\LoggerAppender {
 	}
 	
 	protected function writeWithoutLocking($string) {
-		if(\n2n\io\IoUtils::fwrite($this->fp, $string) === false) {
+		if(\n2n\util\io\IoUtils::fwrite($this->fp, $string) === false) {
 			$this->warn("Failed writing to file. Closing appender.");
 			$this->closed = true;				
 		}

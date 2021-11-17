@@ -54,9 +54,9 @@ namespace n2n\log4php\appender;
 	protected $fp = null;
 
 	public function activateOptions() {
-		$this->fp = \n2n\io\IoUtils::fopen($this->target, 'w');
+		$this->fp = \n2n\util\io\IoUtils::fopen($this->target, 'w');
 		if(is_resource($this->fp) && $this->layout !== null) {
-			\n2n\io\IoUtils::fwrite($this->fp, $this->layout->getHeader());
+			\n2n\util\io\IoUtils::fwrite($this->fp, $this->layout->getHeader());
 		}
 		$this->closed = (bool)is_resource($this->fp) === false;
 	}
@@ -65,7 +65,7 @@ namespace n2n\log4php\appender;
 	public function close() {
 		if($this->closed != true) {
 			if (is_resource($this->fp) && $this->layout !== null) {
-				\n2n\io\IoUtils::fwrite($this->fp, $this->layout->getFooter());
+				\n2n\util\io\IoUtils::fwrite($this->fp, $this->layout->getFooter());
 				fclose($this->fp);
 			}
 			$this->closed = true;
@@ -74,7 +74,7 @@ namespace n2n\log4php\appender;
 
 	public function append(\n2n\log4php\logging\LoggingEvent $event) {
 		if (is_resource($this->fp) && $this->layout !== null) {
-			\n2n\io\IoUtils::fwrite($this->fp, $this->layout->format($event));
+			\n2n\util\io\IoUtils::fwrite($this->fp, $this->layout->format($event));
 		}
 	}
 	

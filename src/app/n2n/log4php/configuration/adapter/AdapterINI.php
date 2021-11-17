@@ -68,7 +68,7 @@ class AdapterINI implements \n2n\log4php\configuration\ConfigurationAdapter {
 			throw new \n2n\log4php\LoggerException("File [$url] does not exist.");
 		}
 		
-		$properties = \n2n\io\IoUtils::parseIniFile($url, true);
+		$properties = \n2n\util\io\IoUtils::parseIniFile($url, true);
 		if ($properties === false) {
 			$error = error_get_last();
 			throw new \n2n\log4php\LoggerException("Error parsing configuration file: {$error['message']}");

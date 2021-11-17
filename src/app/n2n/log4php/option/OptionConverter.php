@@ -36,7 +36,7 @@ class OptionConverter {
 	 * String values which are converted to boolean FALSE.
 	 * 
 	 * Note that an empty string must convert to false, because 
-	 * \n2n\io\IoUtils::parseIniFile() which is used for parsing configuration 
+	 * \n2n\util\io\IoUtils::parseIniFile() which is used for parsing configuration 
 	 * converts the value _false_ to an empty string.
 	 */
 	private static $falseValues = array('0', 'false', 'no', 'off', '');

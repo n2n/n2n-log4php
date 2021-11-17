@@ -80,7 +80,7 @@ class AppenderSocket extends \n2n\log4php\LoggerAppender {
 			return;
 		}
 	
-		if (false === \n2n\io\IoUtils::fwrite($socket, $this->layout->format($event))) {
+		if (false === \n2n\util\io\IoUtils::fwrite($socket, $this->layout->format($event))) {
 			$this->warn("Error writing to socket. Closing appender.");
 			$this->closed = true;
 		}

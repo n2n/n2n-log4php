@@ -134,7 +134,7 @@ class RollingFile extends \n2n\log4php\appender\AppenderFile {
 		}
 		
 		// Truncate the active file
-		\n2n\io\IoUtils::ftruncate($this->fp, 0);
+		\n2n\util\io\IoUtils::ftruncate($this->fp, 0);
 		rewind($this->fp);
 	}
 	
@@ -151,19 +151,19 @@ class RollingFile extends \n2n\log4php\appender\AppenderFile {
 	private function compressFile($source, $target) {
 		$target = 'compress.zlib://' . $target;
 		
-		$fin = \n2n\io\IoUtils::fopen($source, 'rb');
+		$fin = \n2n\util\io\IoUtils::fopen($source, 'rb');
 		if ($fin === false) {
 			throw new \n2n\log4php\LoggerException("Unable to open file for reading: [$source].");
 		}
 		
-		$fout = \n2n\io\IoUtils::fopen($target, 'wb');
+		$fout = \n2n\util\io\IoUtils::fopen($target, 'wb');
 		if ($fout === false) {
 			throw new \n2n\log4php\LoggerException("Unable to open file for writing: [$target].");
 		}
 	
 		while (!feof($fin)) {
-			$chunk = \n2n\io\IoUtils::fread($fin, self::COMPRESS_CHUNK_SIZE);
-			if (false === \n2n\io\IoUtils::fwrite($fout, $chunk)) {
+			$chunk = \n2n\util\io\IoUtils::fread($fin, self::COMPRESS_CHUNK_SIZE);
+			if (false === \n2n\util\io\IoUtils::fwrite($fout, $chunk)) {
 				throw new \n2n\log4php\LoggerException("Failed writing to compressed file.");
 			}
 		}
@@ -204,15 +204,15 @@ class RollingFile extends \n2n\log4php\appender\AppenderFile {
 		}
 		
 		// Lock the file while writing and possible rolling over
-		if(\n2n\io\IoUtils::flock($this->fp, LOCK_EX)) {
+		if(\n2n\util\io\IoUtils::flock($this->fp, LOCK_EX)) {
 			
 			// Write to locked file
-			if(\n2n\io\IoUtils::fwrite($this->fp, $string) === false) {
+			if(\n2n\util\io\IoUtils::fwrite($this->fp, $string) === false) {
 				$this->warn("Failed writing to file. Closing appender.");
 				$this->closed = true;
 			}
 			
-			// Stats cache must be cleared, otherwise \n2n\io\IoUtils::filesize() returns cached results
+			// Stats cache must be cleared, otherwise \n2n\util\io\IoUtils::filesize() returns cached results
 			// If supported (PHP 5.3+), clear only the state cache for the target file
 			if ($this->clearConditional) {
 				clearstatcache(true, $this->file);
@@ -221,7 +221,7 @@ class RollingFile extends \n2n\log4php\appender\AppenderFile {
 			}
 			
 			// Rollover if needed
-			if (\n2n\io\IoUtils::filesize($this->file) > $this->maxFileSize) {
+			if (\n2n\util\io\IoUtils::filesize($this->file) > $this->maxFileSize) {
 				try {
 					$this->rollOver();
 				} catch (\n2n\log4php\LoggerException $ex) {
@@ -230,7 +230,7 @@ class RollingFile extends \n2n\log4php\appender\AppenderFile {
 				}
 			}
 			
-			\n2n\io\IoUtils::flock($this->fp, LOCK_UN);
+			\n2n\util\io\IoUtils::flock($this->fp, LOCK_UN);
 		} else {
 			$this->warn("Failed locking file for writing. Closing appender.");
 			$this->closed = true;

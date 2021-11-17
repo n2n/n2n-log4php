@@ -8,7 +8,7 @@
 	],
 	"homepage" : "http://n2n.rocks",
 	"minimum-stability" : "dev",
-	"prefer-stable": true,
+	"prefer-stable" : true,
 	"config" : {
 		"vendor-dir" : "src/vendor"
 	},

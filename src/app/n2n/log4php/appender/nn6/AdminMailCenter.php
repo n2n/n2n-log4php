@@ -1,7 +1,7 @@
 <?php
 namespace n2n\log4php\appender\nn6;
 use DateTime;
-use n2n\io\fs\FsPath;
+use n2n\util\io\fs\FsPath;
 
 use n2n\core\VarStore;
 
@@ -11,7 +11,7 @@ use n2n\log4php\LoggerAppender;
 use n2n\log4php\LoggerException;
 use n2n\log4php\logging\LoggingEvent;
 use n2n\mail\Mail;
-use n2n\io\IoUtils;
+use n2n\util\io\IoUtils;
 
 /**
  * Adminmailcenter uses the SimpleXML function to output events. 
