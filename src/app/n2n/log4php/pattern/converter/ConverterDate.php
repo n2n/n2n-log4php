@@ -70,9 +70,9 @@ class ConverterDate extends \n2n\log4php\pattern\PatternConverter {
 	
 	public function convert(\n2n\log4php\logging\LoggingEvent $event) {
 		if ($this->useLocalDate) {
-			return $this->date($this->format, $event->getTimeStamp());
+			return $this->date($this->format, (int) $event->getTimeStamp());
 		}
-		return date($this->format, $event->getTimeStamp());
+		return date($this->format, (int) $event->getTimeStamp());
 	}
 	
 	/**
