@@ -33,7 +33,7 @@ class AdminMailCenter extends LoggerAppender {
 	protected $file;
 
 	const LOG_FOLDER = 'mail';
-	const DEFAULT_MAIL_FILE_NAME = 'mails.xml';
+	const DEFAULT_MAIL_FILE_NAME = 'mail.xml';
 
 	const TAG_NAME_MAIL_ITEMS = 'logItems';
 	const TAG_NAME_ITEM = 'item';
