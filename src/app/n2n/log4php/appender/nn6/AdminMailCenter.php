@@ -168,7 +168,7 @@ class AdminMailCenter extends LoggerAppender {
 				}
 			} else {
 				$xmlContents .= $prefix . '<' . htmlspecialchars($name) . '>' .
-				htmlspecialchars($value) . '</' . htmlspecialchars($name) . '>' . "\r\n";
+				htmlspecialchars((string) $value) . '</' . htmlspecialchars($name) . '>' . "\r\n";
 			}
 		}
 		return $xmlContents;
