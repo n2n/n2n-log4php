@@ -57,7 +57,7 @@ abstract class PatternConverter {
 	 * @param \n2n\log4php\formatting\FormattingInfo $formattingInfo
 	 * @param array $option
 	 */
-	public function __construct(\n2n\log4php\formatting\FormattingInfo $formattingInfo = null, $option = null) {  
+	public function __construct(?\n2n\log4php\formatting\FormattingInfo $formattingInfo = null, $option = null) {  
 		$this->formattingInfo = $formattingInfo;
 		$this->option = $option;
 		$this->activateOptions();

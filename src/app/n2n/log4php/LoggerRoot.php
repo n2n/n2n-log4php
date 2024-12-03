@@ -32,7 +32,7 @@ class LoggerRoot extends \n2n\log4php\Logger {
 	 *
 	 * @param integer $level initial log level
 	 */
-	public function __construct(\n2n\log4php\LoggerLevel $level = null) {
+	public function __construct(?\n2n\log4php\LoggerLevel $level = null) {
 		parent::__construct('root');
 
 		if($level == null) {
@@ -54,7 +54,7 @@ class LoggerRoot extends \n2n\log4php\Logger {
 	 * 
 	 * @param \n2n\log4php\LoggerLevel $level
 	 */
-	public function setLevel(\n2n\log4php\LoggerLevel $level = null) {
+	public function setLevel(?\n2n\log4php\LoggerLevel $level = null) {
 		if (isset($level)) {
 			parent::setLevel($level);
 		} else {
