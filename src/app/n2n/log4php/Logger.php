@@ -366,7 +366,7 @@ class Logger {
 	 * @param boolean $additive
 	 */
 	public function setAdditivity($additive) {
-		$this->additive = (boolean) $additive;
+		$this->additive = (bool) $additive;
 	}
 	
 	/**

@@ -89,11 +89,11 @@ class OptionConverter {
 	 * Floats cannot be converted to integer.
 	 */
 	public static function toIntegerEx($value) {
-		if (is_integer($value)) {
+		if (is_int($value)) {
 			return $value;
 		}
-		if (is_numeric($value) && ($value == (integer) $value)) {
-			return (integer) $value;
+		if (is_numeric($value) && ($value == (int) $value)) {
+			return (int) $value;
 		}
 	
 		throw new \n2n\log4php\LoggerException("Given value [" . var_export($value, true) . "] cannot be converted to integer.");
@@ -104,11 +104,11 @@ class OptionConverter {
 	 * Floats cannot be converted to integer.
 	 */
 	public static function toPositiveIntegerEx($value) {
-		if (is_integer($value) && $value > 0) {
+		if (is_int($value) && $value > 0) {
 			return $value;
 		}
-		if (is_numeric($value) && ($value == (integer) $value) && $value > 0) {
-			return (integer) $value;
+		if (is_numeric($value) && ($value == (int) $value) && $value > 0) {
+			return (int) $value;
 		}
 	
 		throw new \n2n\log4php\LoggerException("Given value [" . var_export($value, true) . "] cannot be converted to a positive integer.");
@@ -149,7 +149,7 @@ class OptionConverter {
 		}
 		
 		if (is_numeric($value)) {
-			return (integer) $value;
+			return (int) $value;
 		}
 		
 		if (!is_string($value)) {
@@ -169,7 +169,7 @@ class OptionConverter {
 				case 'GB': $size *= pow(1024, 3); break;
 			}
 			
-			return (integer) $size;
+			return (int) $size;
 		}
 		
 		throw new \n2n\log4php\LoggerException("Given value [$value] cannot be converted to a file size.");
