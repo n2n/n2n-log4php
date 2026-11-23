@@ -127,7 +127,7 @@ class OptionConverter {
 	}
 
 	/**
-	 * Converts a value to a valid file size (integer).
+	 * Converts a value to a valid file size (int).
 	 * 
 	 * Supports 'KB', 'MB' and 'GB' suffixes, where KB = 1024 B etc. 
 	 *
